@@ -1,0 +1,17 @@
+{
+  "name": "vr-platform",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "hub",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @vr/hub",
+    "build": "npm run build -w @vr/hub",
+    "type-check": "npm run type-check -w @vr/hub"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

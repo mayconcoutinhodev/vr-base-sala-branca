@@ -1,0 +1,38 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@vr/core": [
+        "../packages/core/src/index.ts"
+      ],
+      "@vr/module-sdk": [
+        "../packages/module-sdk/src/index.ts"
+      ],
+      "@vr/module-hub-world": [
+        "../packages/module-hub-world/src/index.ts"
+      ],
+      "@vr/module-training-room": [
+        "../packages/module-training-room/src/index.ts"
+      ],
+      "@vr/module-inventory": [
+        "../packages/module-inventory/src/index.ts"
+      ]
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true
+  },
+  "include": [
+    "src",
+    "next.config.mjs",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

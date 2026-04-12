@@ -1,0 +1,33 @@
+{
+  "name": "@vr/hub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --experimental-https --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vr/core": "*",
+    "@vr/module-sdk": "*",
+    "@vr/module-hub-world": "*",
+    "@vr/module-training-room": "*",
+    "@vr/module-inventory": "*",
+    "next": "^14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@react-three/fiber": "^8.16.6",
+    "@react-three/xr": "^5.7.1",
+    "three": "^0.164.1",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.164.1",
+    "typescript": "^5.4.5"
+  }
+}
