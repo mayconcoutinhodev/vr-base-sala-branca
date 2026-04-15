@@ -6,6 +6,9 @@ import { XR, Hands } from '@react-three/xr';
 import { getPlatform } from '../boot/platform';
 import { HubOverlay } from '../ui/HubOverlay';
 import { VRHUD } from './VRHUD';
+import { HubWorld } from './HubWorld';
+import { TestLabWorld } from './TestLabWorld';
+import { useSceneStore } from '../store/sceneStore';
 import type { VRPlatform } from '@vr/core';
 
 type EnterVRFn = () => Promise<void>;
@@ -51,10 +54,8 @@ export default function VRApp() {
       >
         <XR>
           <XRBridge onEnterVRReady={handleEnterVRReady} />
-          <HubScene />
-          {/* Renderiza modelos 3D das mãos */}
+          <SceneRenderer />
           <Hands />
-          {/* HUD sempre à frente com joystick + botões */}
           <VRHUD onButton={(i) => console.log('[HUD] botão', i)} />
         </XR>
       </Canvas>
@@ -64,85 +65,46 @@ export default function VRApp() {
   );
 }
 
-/** Ambiente básico visível da sala hub. */
-function HubScene() {
+/** Renderiza o mundo ativo conforme o sceneStore. */
+function SceneRenderer() {
+  const active = useSceneStore((s) => s.active);
+
   return (
     <>
-      {/* Iluminação */}
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 8, 5]} intensity={1} castShadow />
-      <pointLight position={[0, 3, 0]} intensity={0.8} color="#8877ff" />
-
-      {/* Céu / fog */}
-      <color attach="background" args={['#0d0d1a']} />
-      <fog attach="fog" args={['#0d0d1a', 10, 40]} />
-
-      {/* Chão */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[30, 30]} />
-        <meshStandardMaterial color="#1a1a2e" roughness={0.9} metalness={0.1} />
-      </mesh>
-
-      {/* Grade no chão para dar profundidade */}
-      <gridHelper args={[30, 30, '#2a2a4a', '#1e1e3a']} position={[0, 0.001, 0]} />
-
-      {/* Teto */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
-        <planeGeometry args={[30, 30]} />
-        <meshStandardMaterial color="#0a0a18" roughness={1} side={2} />
-      </mesh>
-
-      {/* Parede fundo */}
-      <mesh position={[0, 2.5, -8]}>
-        <planeGeometry args={[16, 5]} />
-        <meshStandardMaterial color="#12122a" roughness={0.8} />
-      </mesh>
-
-      {/* Portais dos módulos — cubos flutuantes como pontos de entrada */}
-      <ModulePortal position={[-3, 1.2, -5]} color="#5a4fcf" label="Training Room" />
-      <ModulePortal position={[3, 1.2, -5]} color="#2d8a6e" label="Inventory" />
-
-      {/* Luz de foco no centro */}
-      <spotLight
-        position={[0, 5, 0]}
-        angle={0.4}
-        penumbra={0.5}
-        intensity={1.5}
-        color="#ffffff"
-        castShadow
-      />
+      {active === 'hub'          && <HubWorld />}
+      {active === 'test-lab'     && <TestLabWorld />}
+      {/* training-room e inventory serão adicionados quando implementados */}
+      {(active === 'training-room' || active === 'inventory') && <PlaceholderWorld name={active} />}
     </>
   );
 }
 
-interface PortalProps {
-  position: [number, number, number];
-  color: string;
-  label: string;
-}
-
-function ModulePortal({ position, color }: PortalProps) {
+/** Placeholder para módulos ainda não implementados. */
+function PlaceholderWorld({ name }: { name: string }) {
+  const setActive = useSceneStore((s) => s.setActive);
   return (
-    <group position={position}>
-      {/* Frame */}
-      <mesh castShadow>
-        <boxGeometry args={[1.4, 2.2, 0.1]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.6} />
+    <>
+      <ambientLight intensity={0.6} />
+      <color attach="background" args={['#0a0a18']} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial color="#111122" roughness={0.9} />
       </mesh>
-      {/* Brilho interior */}
-      <mesh position={[0, 0, 0.06]}>
-        <planeGeometry args={[1.1, 1.9]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.6}
-          transparent
-          opacity={0.4}
-        />
+      {/* Cubo de retorno — clique/pinch para voltar ao hub */}
+      <mesh
+        position={[0, 1.2, -1.5]}
+        onClick={() => setActive('hub')}
+      >
+        <boxGeometry args={[0.3, 0.3, 0.3]} />
+        <meshStandardMaterial color="#ff3300" emissive="#ff1100" emissiveIntensity={2} />
       </mesh>
-      {/* Luz pontual para iluminar a área */}
-      <pointLight color={color} intensity={0.6} distance={4} />
-    </group>
+      <pointLight position={[0, 2, 0]} color="#5544ff" intensity={1} distance={5} />
+      {/* Aviso visual: módulo {name} em construção */}
+      <mesh position={[0, 1.8, -2]}>
+        <planeGeometry args={[1.5, 0.4]} />
+        <meshBasicMaterial color="#220011" transparent opacity={0.7} />
+      </mesh>
+    </>
   );
 }
 

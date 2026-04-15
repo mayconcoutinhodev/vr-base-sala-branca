@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Read(//c/Users/mcmcm/AppData/Roaming/npm/**)",
+      "Read(//c/Users/mcmcm/.npm/**)",
+      "Read(//c/Users/mcmcm/.claude/projects/c--Users-mcmcm-OneDrive--rea-de-Trabalho-vr-base-sala-branca/memory//**)",
+      "Read(//c/Users/mcmcm/.claude/projects/c--Users-mcmcm-OneDrive--rea-de-Trabalho-vr-base-sala-branca/memory/**)",
+      "Bash(node -e \"const p = require\\('path'\\); console.log\\(p.join\\(require\\('os'\\).homedir\\(\\), 'AppData', 'Roaming', 'npm'\\)\\)\")",
+      "Read(//c/Users/mcmcm/**)",
+      "Bash(rm -f pnpm-lock.yaml pnpm-workspace.yaml)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm run:*)",
+      "Bash(kill %1)",
+      "Bash(wait)",
+      "Bash(ipconfig)",
+      "Bash(ipconfig.exe)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\mcmcm\\.claude\\projects\\c--Users-mcmcm-OneDrive--rea-de-Trabalho-vr-base-sala-branca\\memory"
+    ]
+  }
+}

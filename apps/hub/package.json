@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --experimental-https --hostname 0.0.0.0",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +13,6 @@
     "@vr/core": "*",
     "@vr/module-sdk": "*",
     "@vr/module-hub-world": "*",
-    "@vr/module-test-lab": "*",
     "@vr/module-training-room": "*",
     "@vr/module-inventory": "*",
     "next": "^14.2.3",

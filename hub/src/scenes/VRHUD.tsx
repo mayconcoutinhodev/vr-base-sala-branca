@@ -90,6 +90,10 @@ export function VRHUD({ onButton }: VRHUDCallbacks) {
   const baseRef = useRef<THREE.Mesh>(null)  // muda de cor quando fechado
   const btnRefs = useRef<(THREE.Mesh | null)[]>([])
 
+  // Indicadores de punho — ficam no topo do HUD
+  const lFistInd = useRef<THREE.Mesh>(null)
+  const rFistInd = useRef<THREE.Mesh>(null)
+
   const lh  = useRef<Hand>(mkHand())
   const rh  = useRef<Hand>(mkHand())
   const joy = useRef(new THREE.Vector2())
@@ -244,6 +248,16 @@ export function VRHUD({ onButton }: VRHUDCallbacks) {
         onButton?.(i)
       }
     }
+
+    // ── 6. Indicadores de punho ───────────────────────────────────────────────
+    if (lFistInd.current) {
+      const m = lFistInd.current.material as THREE.MeshBasicMaterial
+      m.color.setHex(lh.current.fist ? 0x00ff55 : 0x223322)
+    }
+    if (rFistInd.current) {
+      const m = rFistInd.current.material as THREE.MeshBasicMaterial
+      m.color.setHex(rh.current.fist ? 0x00ff55 : 0x223322)
+    }
   })
 
   return (
@@ -299,6 +313,27 @@ export function VRHUD({ onButton }: VRHUDCallbacks) {
       <mesh position={[0, 0, 0.012]}>
         <ringGeometry args={[0.006, 0.010, 24]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+      </mesh>
+
+      {/* ── Indicadores de punho — acima do HUD ── */}
+      {/* L Fist */}
+      <mesh ref={lFistInd} position={[-0.12, 0.195, 0.001]}>
+        <planeGeometry args={[0.10, 0.032]} />
+        <meshBasicMaterial color="#223322" />
+      </mesh>
+      {/* R Fist */}
+      <mesh ref={rFistInd} position={[0.04, 0.195, 0.001]}>
+        <planeGeometry args={[0.10, 0.032]} />
+        <meshBasicMaterial color="#223322" />
+      </mesh>
+      {/* Labels fixos (contorno) */}
+      <mesh position={[-0.12, 0.195, 0.0005]}>
+        <planeGeometry args={[0.102, 0.034]} />
+        <meshBasicMaterial color="#444444" transparent opacity={0.5} />
+      </mesh>
+      <mesh position={[0.04, 0.195, 0.0005]}>
+        <planeGeometry args={[0.102, 0.034]} />
+        <meshBasicMaterial color="#444444" transparent opacity={0.5} />
       </mesh>
     </group>
   )
